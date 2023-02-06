@@ -1,8 +1,43 @@
-import React from 'react';
+/* eslint-disable no-undef */
+/* eslint-disable no-use-before-define */
+import { useState } from 'react';
 import './Main.css';
 import logo2 from '../Images/logo3.png';
 
 function Main() {
+  const [message, setMessage] = useState({
+    america: 0,
+    europe: 0,
+    africa: 0,
+    china: 0,
+  });
+
+  const handleChange = (e) => {
+    const country = e.target.name;
+    const val = e.target.value;
+    const newValues = {
+      ...message,
+      [country]: val,
+    };
+
+    setMessage(newValues);
+
+    calTotal(newValues);
+  };
+
+  const [, setTotal] = useState(0);
+  const calTotal = (newValues) => {
+    const { america, europe, africa, china } = newValues;
+    const newTotal =
+      parseInt(america, 10) +
+      parseInt(europe, 10) +
+      parseInt(africa, 10) +
+      parseInt(china, 10);
+    setTotal(newTotal);
+
+    console.log(newTotal);
+  };
+
   return (
     <div className="main">
       <div className="main__holder__left">
@@ -24,38 +59,58 @@ function Main() {
         </div>
 
         <div className="currency__options">
-          <input type="number" value="USD" />
+          <input
+            type="number"
+            name="america"
+            value={message.america}
+            onChange={handleChange}
+          />
           <span>USD</span>
         </div>
 
         <div className="currency__options">
-          <input type="number" value="EUR" />
+          <input
+            type="number"
+            name="europe"
+            value={message.europe}
+            onChange={handleChange}
+          />
           <span>EUR</span>
         </div>
 
         <div className="currency__options">
-          <input type="number" value="XAF" />
+          <input
+            type="number"
+            name="africa"
+            value={message.africa}
+            onChange={handleChange}
+          />
           <span>XAF</span>
         </div>
 
         <div className="currency__options">
-          <input type="number" value="CNY" />
+          <input
+            type="number"
+            name="china"
+            value={message.china}
+            onChange={handleChange}
+          />
           <span>CNY</span>
         </div>
 
-        <button className="save" type="button">
+        <button className="save" type="button" onClick={() => calTotal()}>
           save
         </button>
         <div>
           <h3>Total currency in XAF</h3>
-          <div className="total__currency">waiting</div>
+          <div className="total__currency">100</div>
         </div>
       </div>
 
       <div className="main__holder__right">
         <img src={logo2} alt="logo" className="logo2" />
         <h1>Currency Converter</h1>
-        <h3>
+        <h3 className="paragraph">
           <i>Below are some of the activities you can perform</i>
         </h3>
         <div className="main__holder__deposit">

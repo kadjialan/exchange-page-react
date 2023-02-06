@@ -21,7 +21,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  min-height: 100vh;
   color: #fff;
   display: flex;
   align-items: center;
@@ -136,9 +136,19 @@
 }
 
 .confirm {
-    padding: 5px;
-    border-radius: 8px;
-    background-color: #ffbf00;
-    border: 3px solid #ffbf00;
-    color: floralwhite;
+  padding: 5px;
+  border-radius: 8px;
+  background-color: #ffbf00;
+  border: 3px solid #ffbf00;
+  color: floralwhite;
+}
+
+.paragraph {
+  max-width: 300px;
+}
+
+@media screen and (max-width: 768px) {
+  .main {
+    flex-direction: column;
+  }
 }
