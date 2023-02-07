@@ -1,41 +1,47 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-use-before-define */
-import { useState } from 'react';
+import { useContext } from 'react';
 import './Main.css';
 import logo2 from '../Images/logo3.png';
+import { QuestionContext } from '../Context';
 
 function Main() {
-  const [message, setMessage] = useState({
-    america: 0,
-    europe: 0,
-    africa: 0,
-    china: 0,
-  });
+  const { total, setTotal, message, setMessage, count, setCount } =
+    useContext(QuestionContext);
 
   const handleChange = (e) => {
     const country = e.target.name;
     const val = e.target.value;
+    console.log(val);
     const newValues = {
       ...message,
       [country]: val,
     };
-
     setMessage(newValues);
-
     calTotal(newValues);
   };
 
-  const [, setTotal] = useState(0);
   const calTotal = (newValues) => {
-    const { america, europe, africa, china } = newValues;
+    const { USD, EUR, XAF, CNY } = newValues;
     const newTotal =
-      parseInt(america, 10) +
-      parseInt(europe, 10) +
-      parseInt(africa, 10) +
-      parseInt(china, 10);
+      parseInt(USD, 10) +
+      parseInt(EUR, 10) +
+      parseInt(XAF, 10) +
+      parseInt(CNY, 10);
     setTotal(newTotal);
+  };
 
-    console.log(newTotal);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+    const values = Object.fromEntries(data.entries());
+
+    console.log('submitting', values);
+
+    if (currency === e.target.name) {
+      setMessage(e.target.name + parseInt(Amount, 10));
+    }
   };
 
   return (
@@ -61,8 +67,8 @@ function Main() {
         <div className="currency__options">
           <input
             type="number"
-            name="america"
-            value={message.america}
+            name="USD"
+            value={message.USD}
             onChange={handleChange}
           />
           <span>USD</span>
@@ -71,8 +77,8 @@ function Main() {
         <div className="currency__options">
           <input
             type="number"
-            name="europe"
-            value={message.europe}
+            name="EUR"
+            value={message.EUR}
             onChange={handleChange}
           />
           <span>EUR</span>
@@ -81,8 +87,8 @@ function Main() {
         <div className="currency__options">
           <input
             type="number"
-            name="africa"
-            value={message.africa}
+            name="XAF"
+            value={message.XAF}
             onChange={handleChange}
           />
           <span>XAF</span>
@@ -91,8 +97,8 @@ function Main() {
         <div className="currency__options">
           <input
             type="number"
-            name="china"
-            value={message.china}
+            name="CNY"
+            value={message.CNY}
             onChange={handleChange}
           />
           <span>CNY</span>
@@ -103,7 +109,7 @@ function Main() {
         </button>
         <div>
           <h3>Total currency in XAF</h3>
-          <div className="total__currency">100</div>
+          <div className="total__currency">{total}</div>
         </div>
       </div>
 
@@ -113,15 +119,15 @@ function Main() {
         <h3 className="paragraph">
           <i>Below are some of the activities you can perform</i>
         </h3>
-        <div className="main__holder__deposit">
+        <form className="main__holder__deposit" onSubmit={handleSubmit}>
           <h3 className="right__headings">Deposite</h3>
           <div>
             <span>Amount :</span>
-            <input type="number" />
+            <input type="number" name="Amount" />
           </div>
           <div>
             <span>Currency for Deposite:</span>
-            <select id="currencies2">
+            <select name="currency" id="currencies2">
               <option value="USD">USD</option>
               <option value="EUR">EUR</option>
               <option value="XAF">XAF</option>
@@ -131,9 +137,9 @@ function Main() {
           <button type="button" className="confirm">
             confirm
           </button>
-        </div>
+        </form>
 
-        <div className="main__holder__deposit">
+        <form className="main__holder__deposit">
           <h3 className="right__headings">Exhange currencies</h3>
           <div>
             <span>Amount :</span>
@@ -157,7 +163,7 @@ function Main() {
           <button type="button" className="confirm">
             confirm
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
