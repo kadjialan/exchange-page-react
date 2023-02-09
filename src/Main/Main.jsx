@@ -1,11 +1,11 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-use-before-define */
-import { useContext } from 'react';
+/* eslint-disable prettier/prettier */
+import { useContext, useState, useEffect } from 'react';
 import './Main.css';
 import logo2 from '../Images/logo3.png';
 import { QuestionContext } from '../Context';
 
 function Main() {
+  const [selected, setSelected] = useState();
   const {
     message1,
     setMessage1,
@@ -19,6 +19,10 @@ function Main() {
     setTotal,
   } = useContext(QuestionContext);
 
+  let ans1 = 0;
+  let ans2 = 0;
+  let ans3 = 0;
+  let ans4 = 0;
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -28,23 +32,74 @@ function Main() {
     // eslint-disable-next-line no-console
     console.log('submitting', values);
     if (values.currency === 'USD') {
-      ans1(message1 + +values.Amount);
+      ans1 = message1 + +values.Amount;
       setMessage1(ans1);
     } else if (values.currency === 'EUR') {
-      const ans2 = message2 + +values.Amount;
+      ans2 = message2 + +values.Amount;
       setMessage2(ans2);
     } else if (values.currency === 'XAF') {
-      const ans3 = message3 + +values.Amount;
+      ans3 = message3 + +values.Amount;
       setMessage3(ans3);
     } else if (values.currency === 'CNY') {
-      const ans4 = message4 + +values.Amount;
+      ans4 = message4 + +values.Amount;
       setMessage4(ans4);
     }
 
-    if (values.defaultCurrency === 'USD') {
-      setTotal(ans1 + ans2 * 0.93 + ans3 * 611.64 + ans4 * 6.79);
-    }
+/*     if (values.defaultCurrency === 'USD') {
+      const operation1 = (
+        ans2 * 0.93 +
+        ans1 * 2 +
+        ans3 * 0.01 +
+        ans4 * 0.14
+      ).toFixed(2);
+      const unit1 = `${operation1} USD`;
+      setTotal(unit1);
+    } else if (values.defaultCurrency === 'EUR') {
+      const operation2 = (
+        ans1 * 0.93 +
+        ans2 +
+        ans3 * 0.01 +
+        ans4 * 0.14
+      ).toFixed(2);
+      const unit2 = `${operation2} EUR`;
+      setTotal(unit2);
+    } else if (values.defaultCurrency === 'XAF') {
+      const operation3 = (
+        ans1 * 611.64 +
+        ans2 * 658.13 +
+        ans3 +
+        ans4 * 90.23
+      ).toFixed(2);
+      const unit3 = `${operation3} XAF`;
+      setTotal(unit3);
+    } else {
+      const operation4 = (
+        ans1 * 6.78 +
+        ans2 * 7.29 +
+        ans3 * 0.01 +
+        ans4
+      ).toFixed(2);
+      const unit4 = `${operation4} CNY`;
+      setTotal(unit4);
+    } */
   };
+
+  function chanceDefaultCurrency(e) {
+    setSelected(e.target.value);
+  }
+
+  useEffect(() => {
+    if (selected === 'EUR') {
+      const operation2 = (
+        ans1 * 0.93 +
+        ans2 +
+        ans3 * 0.01 +
+        ans4 * 0.14
+      ).toFixed(2);
+      const unit2 = `${operation2} EUR`;
+      setTotal(unit2);
+    }
+  }); 
 
   return (
     <div className="main">
@@ -87,7 +142,7 @@ function Main() {
           save
         </button>
         <div>
-          <h3>Total currency in XAF</h3>
+          <h3>Total Currency</h3>
           <div className="total__currency">{total}</div>
         </div>
       </div>
@@ -103,11 +158,15 @@ function Main() {
             <p>
               <b>Default Currenncy:</b>
             </p>
-            <select name="defaultCurrency" id="currencies">
+            <select
+              name="defaultCurrency"
+              id="currencies"
+              onChange={chanceDefaultCurrency}
+            >
               <option value="USD">USD</option>
               <option value="EUR">EUR</option>
               <option value="XAF">XAF</option>
-              <option value="XAF">CNY</option>
+              <option value="CNY">CNY</option>
             </select>
           </div>
 
