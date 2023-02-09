@@ -58,9 +58,16 @@
   gap: 7px;
 }
 
-.main__holder__left input {
+.input {
   height: 29px;
   border-radius: 7px 0 0 7px;
+  width: 200px;
+  background-color: azure;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
   border: none;
 }
 

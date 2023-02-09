@@ -8,18 +8,26 @@ import Main from './Main/Main';
 
 function App() {
   const [total, setTotal] = useState(0);
-  const [message, setMessage] = useState({
-    USD: 0,
-    EUR: 0,
-    XAF: 0,
-    CNY: 0,
-  });
-  const [count, setCount] = useState(0);
+  const [message1, setMessage1] = useState(30);
+  const [message2, setMessage2] = useState(72.5);
+  const [message3, setMessage3] = useState(33.0);
+  const [message4, setMessage4] = useState(21.9);
   return (
     <div className="App">
       <BrowserRouter>
         <QuestionProvider
-          value={{ setTotal, total, message, setMessage, count, setCount }}
+          value={{
+            setTotal,
+            total,
+            message1,
+            setMessage1,
+            message2,
+            setMessage2,
+            message3,
+            setMessage3,
+            message4,
+            setMessage4,
+          }}
         >
           <Routes>
             <Route index path="/" element={<Home />} />

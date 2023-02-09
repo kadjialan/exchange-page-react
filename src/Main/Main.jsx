@@ -6,30 +6,18 @@ import logo2 from '../Images/logo3.png';
 import { QuestionContext } from '../Context';
 
 function Main() {
-  const { total, setTotal, message, setMessage, count, setCount } =
-    useContext(QuestionContext);
-
-  const handleChange = (e) => {
-    const country = e.target.name;
-    const val = e.target.value;
-    console.log(val);
-    const newValues = {
-      ...message,
-      [country]: val,
-    };
-    setMessage(newValues);
-    calTotal(newValues);
-  };
-
-  const calTotal = (newValues) => {
-    const { USD, EUR, XAF, CNY } = newValues;
-    const newTotal =
-      parseInt(USD, 10) +
-      parseInt(EUR, 10) +
-      parseInt(XAF, 10) +
-      parseInt(CNY, 10);
-    setTotal(newTotal);
-  };
+  const {
+    message1,
+    setMessage1,
+    message2,
+    setMessage2,
+    message3,
+    setMessage3,
+    message4,
+    setMessage4,
+    total,
+    setTotal,
+  } = useContext(QuestionContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -37,10 +25,24 @@ function Main() {
     const data = new FormData(event.currentTarget);
     const values = Object.fromEntries(data.entries());
 
+    // eslint-disable-next-line no-console
     console.log('submitting', values);
+    if (values.currency === 'USD') {
+      ans1(message1 + +values.Amount);
+      setMessage1(ans1);
+    } else if (values.currency === 'EUR') {
+      const ans2 = message2 + +values.Amount;
+      setMessage2(ans2);
+    } else if (values.currency === 'XAF') {
+      const ans3 = message3 + +values.Amount;
+      setMessage3(ans3);
+    } else if (values.currency === 'CNY') {
+      const ans4 = message4 + +values.Amount;
+      setMessage4(ans4);
+    }
 
-    if (currency === e.target.name) {
-      setMessage(e.target.name + parseInt(Amount, 10));
+    if (values.defaultCurrency === 'USD') {
+      setTotal(ans1 + ans2 * 0.93 + ans3 * 611.64 + ans4 * 6.79);
     }
   };
 
@@ -52,59 +54,36 @@ function Main() {
           <h3>Wallet</h3>
         </div>
 
-        <div className="main__heading">
-          <p>
-            <b>Default Currenncy:</b>
-          </p>
-          <select id="currencies">
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="XAF">XAF</option>
-            <option value="XAF">CNY</option>
-          </select>
-        </div>
-
         <div className="currency__options">
-          <input
-            type="number"
-            name="USD"
-            value={message.USD}
-            onChange={handleChange}
-          />
+          <div className="input" type="number" name="USD">
+            {message1}
+          </div>
+
           <span>USD</span>
         </div>
 
         <div className="currency__options">
-          <input
-            type="number"
-            name="EUR"
-            value={message.EUR}
-            onChange={handleChange}
-          />
+          <div className="input" type="number" name="EUR">
+            {message2}
+          </div>
           <span>EUR</span>
         </div>
 
         <div className="currency__options">
-          <input
-            type="number"
-            name="XAF"
-            value={message.XAF}
-            onChange={handleChange}
-          />
+          <div className="input" type="number" name="XAF">
+            {message3}
+          </div>
           <span>XAF</span>
         </div>
 
         <div className="currency__options">
-          <input
-            type="number"
-            name="CNY"
-            value={message.CNY}
-            onChange={handleChange}
-          />
+          <div className="input" type="number" name="CNY">
+            {message4}
+          </div>
           <span>CNY</span>
         </div>
 
-        <button className="save" type="button" onClick={() => calTotal()}>
+        <button className="save" type="button">
           save
         </button>
         <div>
@@ -120,6 +99,18 @@ function Main() {
           <i>Below are some of the activities you can perform</i>
         </h3>
         <form className="main__holder__deposit" onSubmit={handleSubmit}>
+          <div className="main__heading">
+            <p>
+              <b>Default Currenncy:</b>
+            </p>
+            <select name="defaultCurrency" id="currencies">
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="XAF">XAF</option>
+              <option value="XAF">CNY</option>
+            </select>
+          </div>
+
           <h3 className="right__headings">Deposite</h3>
           <div>
             <span>Amount :</span>
