@@ -1,0 +1,158 @@
+/* *{
+    outline: 1px solid red;
+} */
+
+#currencies {
+  width: 60px;
+  border: none;
+  border-radius: 5px;
+  color: bisque;
+  background-color: #151313e1;
+  border: 1px solid #151313e1;
+}
+
+.currency__options {
+  display: flex;
+  align-items: center;
+}
+
+.main {
+  background-image: url('../Images/currency.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main__holder__left {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 30px;
+  background-color: rgba(12, 12, 13, 0.269);
+}
+
+.fa-solid {
+  color: #ffc107;
+  font-size: 40px;
+}
+
+.main__wallet {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: #ffc107;
+}
+
+.main__heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 7px;
+}
+
+.input {
+  height: 29px;
+  border-radius: 7px 0 0 7px;
+  width: 200px;
+  background-color: azure;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
+  border: none;
+}
+
+.main__holder__left span,
+.main__holder__right span {
+  padding: 6px;
+  background-color: rgb(8 8 8 / 53%);
+}
+
+.total__currency {
+  width: 190px;
+  height: 30px;
+  background-color: #fff;
+  color: black;
+  border-radius: 5px 20px;
+  margin: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+}
+
+.logo2 {
+  width: 170px;
+}
+
+.main__holder__right h1 {
+  color: #ffc107;
+}
+
+.main__holder__right input {
+  height: 29px;
+  border: none;
+}
+
+.main__holder__deposit {
+  background-color: #0e040485;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+#currencies2 {
+  height: 29px;
+}
+
+.right__headings {
+  color: #ffc107;
+}
+
+.main__holder__right {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 30px;
+  background-color: #0c0c0d45;
+  border: 3px solid #0c0c0d45;
+}
+
+.exchanger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.confirm {
+  padding: 5px;
+  border-radius: 8px;
+  background-color: #ffbf00;
+  border: 3px solid #ffbf00;
+  color: floralwhite;
+}
+
+.paragraph {
+  max-width: 300px;
+}
+
+@media screen and (max-width: 768px) {
+  .main {
+    flex-direction: column;
+  }
+}
