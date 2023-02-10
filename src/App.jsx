@@ -7,7 +7,8 @@ import Home from './Home/Home';
 import Main from './Main/Main';
 
 function App() {
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState('100.76 XAF');
+  const [select, setSelect] = useState();
   const [message1, setMessage1] = useState(30);
   const [message2, setMessage2] = useState(72.5);
   const [message3, setMessage3] = useState(33.0);
@@ -27,6 +28,8 @@ function App() {
             setMessage3,
             message4,
             setMessage4,
+            select,
+            setSelect,
           }}
         >
           <Routes>
