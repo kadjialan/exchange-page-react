@@ -99,13 +99,11 @@ function Main() {
         const val1 = message3 - values2.deposite;
         setMessage3(val1);
         setMessage1(message1 + val1 * 0.01);
-      }
-      if (values2.from === 'EUR' && values2.deposite < message2) {
+      } else if (values2.from === 'EUR' && values2.deposite < message2) {
         const val1 = message2 - values2.deposite;
         setMessage2(val1);
         setMessage1(message1 + val1 * 0.93);
-      }
-      if (values2.from === 'CNY' && values2.deposite < message4) {
+      } else if (values2.from === 'CNY' && values2.deposite < message4) {
         const val1 = message4 - values2.deposite;
         setMessage4(val1);
         setMessage1(message1 + val1 * 0.14);
@@ -117,13 +115,11 @@ function Main() {
         const val1 = message3 - values2.deposite;
         setMessage3(val1);
         setMessage2(message2 + val1 * 0.01);
-      }
-      if (values2.from === 'USD' && values2.deposite < message1) {
+      } else if (values2.from === 'USD' && values2.deposite < message1) {
         const val1 = message1 - values2.deposite;
         setMessage1(val1);
         setMessage2(message2 + val1 * 0.93);
-      }
-      if (values2.from === 'CNY' && values2.deposite < message4) {
+      } else if (values2.from === 'CNY' && values2.deposite < message4) {
         const val1 = message4 - values2.deposite;
         setMessage4(val1);
         setMessage2(message2 + val1 * 0.14);
@@ -135,13 +131,11 @@ function Main() {
         const val1 = message3 - values2.deposite;
         setMessage3(val1);
         setMessage4(message4 + val1 * 0.01);
-      }
-      if (values2.from === 'USD' && values2.deposite < message1) {
+      } else if (values2.from === 'USD' && values2.deposite < message1) {
         const val1 = message1 - values2.deposite;
         setMessage1(val1);
         setMessage4(message4 + val1 * 6.78);
-      }
-      if (values2.from === 'EUR' && values2.deposite < message2) {
+      } else if (values2.from === 'EUR' && values2.deposite < message2) {
         const val1 = message2 - values2.deposite;
         setMessage2(val1);
         setMessage4(message4 + val1 * 7.29);
@@ -153,13 +147,11 @@ function Main() {
         const val1 = message4 - values2.deposite;
         setMessage4(val1);
         setMessage3(message3 + val1 * 90.23);
-      }
-      if (values2.from === 'USD' && values2.deposite < message1) {
+      } else if (values2.from === 'USD' && values2.deposite < message1) {
         const val1 = message1 - values2.deposite;
         setMessage1(val1);
         setMessage3(message3 + val1 * 611.64);
-      }
-      if (values2.from === 'EUR' && values2.deposite < message2) {
+      } else if (values2.from === 'EUR' && values2.deposite < message2) {
         const val1 = message2 - values2.deposite;
         setMessage2(val1);
         setMessage3(message3 + val1 * 658.13);
