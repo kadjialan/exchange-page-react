@@ -5,271 +5,334 @@ import { useContext } from 'react';
 import './Main.css';
 import logo2 from '../Images/logo3.png';
 import { QuestionContext } from '../Context';
+import { useState, useEffect } from 'react';
+
 
 function Main() {
   const {
-    message1,
+    message1, // USD
     setMessage1,
-    message2,
+    message2, // EUR
     setMessage2,
-    message3,
+    message3, // XAF
     setMessage3,
-    message4,
+    message4, // CNY
     setMessage4,
     total,
     setTotal,
   } = useContext(QuestionContext);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const [isVisible, setIsVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState('deposit');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [notification, setNotification] = useState(null);
 
-    let ans1 = 0;
-    let ans2 = 0;
-    let ans3 = 0;
-    let ans4 = 0;
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
+  const exchangeRates = {
+    USD: { EUR: 0.93, XAF: 611.64, CNY: 6.78 },
+    EUR: { USD: 1.08, XAF: 658.13, CNY: 7.29 },
+    XAF: { USD: 0.0016, EUR: 0.0015, CNY: 0.011 },
+    CNY: { USD: 0.15, EUR: 0.14, XAF: 90.23 },
+  };
+
+  const currencyData = [
+    { code: 'USD', symbol: '$', flag: '🇺🇸', balance: message1, setter: setMessage1, color: '#22c55e' },
+    { code: 'EUR', symbol: '€', flag: '🇪🇺', balance: message2, setter: setMessage2, color: '#3b82f6' },
+    { code: 'XAF', symbol: 'F', flag: '🇨🇲', balance: message3, setter: setMessage3, color: '#f59e0b' },
+    { code: 'CNY', symbol: '¥', flag: '🇨🇳', balance: message4, setter: setMessage4, color: '#ef4444' },
+  ];
+
+  const totalBalance = message1 + message2 + message3 + message4;
+
+  const handleDeposit = (event) => {
+    event.preventDefault();
+    setIsProcessing(true);
 
     const data = new FormData(event.currentTarget);
     const values = Object.fromEntries(data.entries());
+    const amount = parseFloat(values.Amount);
+    const currency = values.currency;
 
-    if (values.currency === 'USD') {
-      ans1 = message1 + +values.Amount;
-      setMessage1(ans1);
-    } else if (values.currency === 'EUR') {
-      ans2 = message2 + +values.Amount;
-      setMessage2(ans2);
-    } else if (values.currency === 'XAF') {
-      ans3 = message3 + +values.Amount;
-      setMessage3(ans3);
-    } else if (values.currency === 'CNY') {
-      ans4 = message4 + +values.Amount;
-      setMessage4(ans4);
+    if (amount <= 0) {
+      showNotification('Please enter a valid amount', 'error');
+      setIsProcessing(false);
+      return;
     }
 
-    if (values.defaultCurrency === 'USD') {
-      const operation1 = (
-        message2 * 0.93 +
+    setTimeout(() => {
+      const currencyInfo = currencyData.find(c => c.code === currency);
+      if (currencyInfo) {
+        currencyInfo.setter(currencyInfo.balance + amount);
+        showNotification(`Successfully deposited ${amount} ${currency}`, 'success');
+        updateTotal(values.defaultCurrency);
+      }
+      setIsProcessing(false);
+      event.target.reset();
+    }, 1000);
+  };
+
+  const handleExchange = (event) => {
+    event.preventDefault();
+    setIsProcessing(true);
+
+    const data = new FormData(event.currentTarget);
+    const values = Object.fromEntries(data.entries());
+    const amount = parseFloat(values.amount);
+    const fromCurrency = values.from;
+    const toCurrency = values.to;
+
+    if (fromCurrency === toCurrency) {
+      showNotification('Please select different currencies', 'error');
+      setIsProcessing(false);
+      return;
+    }
+
+    const fromCurrencyData = currencyData.find(c => c.code === fromCurrency);
+    const toCurrencyData = currencyData.find(c => c.code === toCurrency);
+
+    if (amount > fromCurrencyData.balance) {
+      showNotification('Insufficient balance', 'error');
+      setIsProcessing(false);
+      return;
+    }
+
+    setTimeout(() => {
+      const rate = exchangeRates[fromCurrency][toCurrency];
+      const convertedAmount = amount * rate;
+
+      fromCurrencyData.setter(fromCurrencyData.balance - amount);
+      toCurrencyData.setter(toCurrencyData.balance + convertedAmount);
+
+      showNotification(
+        `Exchanged ${amount} ${fromCurrency} to ${convertedAmount.toFixed(2)} ${toCurrency}`,
+        'success'
+      );
+      setIsProcessing(false);
+      event.target.reset();
+    }, 1500);
+  };
+
+  const updateTotal = (defaultCurrency) => {
+    if (defaultCurrency === 'USD') {
+      const total = (
         message1 +
-        message3 * 0.0016 +
-        message4 * 0.15
+        message2 * exchangeRates.EUR.USD +
+        message3 * exchangeRates.XAF.USD +
+        message4 * exchangeRates.CNY.USD
       ).toFixed(2);
-      const unit1 = `${operation1} USD`;
-      setTotal(unit1);
-    } else if (values.defaultCurrency === 'EUR') {
-      const operation2 = (
-        message1 * 0.93 +
+      setTotal(`${total} USD`);
+    } else if (defaultCurrency === 'EUR') {
+      const total = (
+        message1 * exchangeRates.USD.EUR +
         message2 +
-        message3 * 0.01 +
-        message4 * 0.14
+        message3 * exchangeRates.XAF.EUR +
+        message4 * exchangeRates.CNY.EUR
       ).toFixed(2);
-      const unit2 = `${operation2} EUR`;
-      setTotal(unit2);
-    } else if (values.defaultCurrency === 'XAF') {
-      const operation3 = (
-        message1 * 611.64 +
-        message2 * 658.13 +
+      setTotal(`${total} EUR`);
+    } else if (defaultCurrency === 'XAF') {
+      const total = (
+        message1 * exchangeRates.USD.XAF +
+        message2 * exchangeRates.EUR.XAF +
         message3 +
-        message4 * 90.23
+        message4 * exchangeRates.CNY.XAF
       ).toFixed(2);
-      const unit3 = `${operation3} XAF`;
-      setTotal(unit3);
+      setTotal(`${total} XAF`);
     } else {
-      const operation4 = (
-        message1 * 6.78 +
-        message2 * 7.29 +
-        message3 * 0.01 +
+      const total = (
+        message1 * exchangeRates.USD.CNY +
+        message2 * exchangeRates.EUR.CNY +
+        message3 * exchangeRates.XAF.CNY +
         message4
       ).toFixed(2);
-      const unit4 = `${operation4} CNY`;
-      setTotal(unit4);
+      setTotal(`${total} CNY`);
     }
   };
 
-  function doExchange(event) {
-    event.preventDefault();
-
-    const change = new FormData(event.currentTarget);
-    const values2 = Object.fromEntries(change.entries());
-
-    if (values2.from === values2.too) {
-      alert('currency for exchange are similar');
-    }
-
-    if (values2.too === 'USD') {
-      if (values2.from === 'XAF' && values2.deposite < message3) {
-        const val1 = message3 - values2.deposite;
-        setMessage3(val1);
-        setMessage1(message1 + val1 * 0.01);
-      } else if (values2.from === 'EUR' && values2.deposite < message2) {
-        const val1 = message2 - values2.deposite;
-        setMessage2(val1);
-        setMessage1(message1 + val1 * 0.93);
-      } else if (values2.from === 'CNY' && values2.deposite < message4) {
-        const val1 = message4 - values2.deposite;
-        setMessage4(val1);
-        setMessage1(message1 + val1 * 0.14);
-      } else {
-        alert('Insufficient amount in wallet');
-      }
-    } else if (values2.too === 'EUR') {
-      if (values2.from === 'XAF' && values2.deposite < message3) {
-        const val1 = message3 - values2.deposite;
-        setMessage3(val1);
-        setMessage2(message2 + val1 * 0.01);
-      } else if (values2.from === 'USD' && values2.deposite < message1) {
-        const val1 = message1 - values2.deposite;
-        setMessage1(val1);
-        setMessage2(message2 + val1 * 0.93);
-      } else if (values2.from === 'CNY' && values2.deposite < message4) {
-        const val1 = message4 - values2.deposite;
-        setMessage4(val1);
-        setMessage2(message2 + val1 * 0.14);
-      } else {
-        alert('Insufficient amount in wallet');
-      }
-    } else if (values2.too === 'CNY') {
-      if (values2.from === 'XAF' && values2.deposite < message3) {
-        const val1 = message3 - values2.deposite;
-        setMessage3(val1);
-        setMessage4(message4 + val1 * 0.01);
-      } else if (values2.from === 'USD' && values2.deposite < message1) {
-        const val1 = message1 - values2.deposite;
-        setMessage1(val1);
-        setMessage4(message4 + val1 * 6.78);
-      } else if (values2.from === 'EUR' && values2.deposite < message2) {
-        const val1 = message2 - values2.deposite;
-        setMessage2(val1);
-        setMessage4(message4 + val1 * 7.29);
-      } else {
-        alert('Insufficient amount in wallet');
-      }
-    } else if (values2.too === 'XAF') {
-      if (values2.from === 'CNY' && values2.deposite < message4) {
-        const val1 = message4 - values2.deposite;
-        setMessage4(val1);
-        setMessage3(message3 + val1 * 90.23);
-      } else if (values2.from === 'USD' && values2.deposite < message1) {
-        const val1 = message1 - values2.deposite;
-        setMessage1(val1);
-        setMessage3(message3 + val1 * 611.64);
-      } else if (values2.from === 'EUR' && values2.deposite < message2) {
-        const val1 = message2 - values2.deposite;
-        setMessage2(val1);
-        setMessage3(message3 + val1 * 658.13);
-      } else {
-        alert('Insufficient amount in wallet');
-      }
-    }
-  }
-
   return (
     <div className="main">
-      <div className="main__holder__left">
-        <div className="main__wallet">
-          <i className="fa-solid fa-wallet" />
-          <h3>Wallet</h3>
+      {notification && (
+        <div className={`notification ${notification.type}`}>
+          <span>{notification.message}</span>
+          <button onClick={() => setNotification(null)}>×</button>
+        </div>
+      )}
+
+      <div className={`main-container ${isVisible ? 'visible' : ''}`}>
+        {/* Wallet Section */}
+        <div className="wallet-section">
+          <div className="wallet-header">
+            <div className="wallet-icon">👛</div>
+            <h2>Digital Wallet</h2>
+            <div className="total-balance-display">
+              <span>Total: ${totalBalance.toFixed(2)}</span>
+            </div>
+          </div>
+
+          <div className="currency-grid">
+            {currencyData.map((currency) => (
+              <div key={currency.code} className="currency-card" style={{ '--color': currency.color }}>
+                <div className="currency-header">
+                  <span className="currency-flag">{currency.flag}</span>
+                  <span className="currency-code">{currency.code}</span>
+                </div>
+                <div className="currency-balance">
+                  <span className="currency-symbol">{currency.symbol}</span>
+                  <span className="balance-amount">{currency.balance.toFixed(2)}</span>
+                </div>
+                <div className="currency-bar">
+                  <div
+                    className="currency-bar-fill"
+                    style={{ width: `${Math.min((currency.balance / 100) * 100, 100)}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="currency__options">
-          <div className="input" type="number" name="USD">
-            {message1}
+        {/* Exchange Section */}
+        <div className="exchange-section">
+          <div className="exchange-header">
+            <img src={logo2} alt="Exchange" className="exchange-logo" />
+            <h2>Currency Exchange</h2>
           </div>
 
-          <span>USD</span>
+          <div className="tab-navigation">
+            <button
+              className={`tab-btn ${activeTab === 'deposit' ? 'active' : ''}`}
+              onClick={() => setActiveTab('deposit')}
+            >
+              <span>💰</span>
+              Deposit
+            </button>
+            <button
+              className={`tab-btn ${activeTab === 'exchange' ? 'active' : ''}`}
+              onClick={() => setActiveTab('exchange')}
+            >
+              <span>🔄</span>
+              Exchange
+            </button>
+          </div>
+
+          {activeTab === 'deposit' && (
+            <div className="form-container deposit-form">
+              <h3>💳 Deposit Funds</h3>
+              <form onSubmit={handleDeposit}>
+                <div className="form-group">
+                  <label>Amount</label>
+                  <input
+                    type="number"
+                    name="Amount"
+                    placeholder="Enter amount"
+                    className="form-input"
+                    min="0.01"
+                    step="0.01"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Currency</label>
+                  <select name="currency" className="form-select" required>
+                    <option value="">Select currency</option>
+                    {currencyData.map((currency) => (
+                      <option key={currency.code} value={currency.code}>
+                        {currency.flag} {currency.code}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Display Total In</label>
+                  <select name="defaultCurrency" className="form-select" required>
+                    <option value="">Select display currency</option>
+                    {currencyData.map((currency) => (
+                      <option key={currency.code} value={currency.code}>
+                        {currency.flag} {currency.code}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button type="submit" className="btn btn-primary form-submit" disabled={isProcessing}>
+                  {isProcessing ? <div className="loading"></div> : <span>💳</span>}
+                  {isProcessing ? 'Processing...' : 'Deposit Funds'}
+                </button>
+              </form>
+            </div>
+          )}
+
+          {activeTab === 'exchange' && (
+            <div className="form-container exchange-form">
+              <h3>🔄 Exchange Currency</h3>
+              <form onSubmit={handleExchange}>
+                <div className="exchange-row">
+                  <div className="form-group">
+                    <label>From</label>
+                    <select name="from" className="form-select" required>
+                      <option value="">Select currency</option>
+                      {currencyData.map((currency) => (
+                        <option key={currency.code} value={currency.code}>
+                          {currency.flag} {currency.code} ({currency.symbol}{currency.balance.toFixed(2)})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="exchange-arrow">
+                    <span>→</span>
+                  </div>
+
+                  <div className="form-group">
+                    <label>To</label>
+                    <select name="to" className="form-select" required>
+                      <option value="">Select currency</option>
+                      {currencyData.map((currency) => (
+                        <option key={currency.code} value={currency.code}>
+                          {currency.flag} {currency.code}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Amount</label>
+                  <input
+                    type="number"
+                    name="amount"
+                    placeholder="Enter amount to exchange"
+                    className="form-input"
+                    min="0.01"
+                    step="0.01"
+                    required
+                  />
+                </div>
+
+                <button type="submit" className="btn btn-secondary form-submit" disabled={isProcessing}>
+                  {isProcessing ? <div className="loading"></div> : <span>🔄</span>}
+                  {isProcessing ? 'Exchanging...' : 'Exchange Currency'}
+                </button>
+              </form>
+            </div>
+          )}
+
+          {total && (
+            <div className="total-display">
+              <h3>Portfolio Value</h3>
+              <div className="total-amount">{total}</div>
+            </div>
+          )}
         </div>
-
-        <div className="currency__options">
-          <div className="input" type="number" name="EUR">
-            {message2}
-          </div>
-          <span>EUR</span>
-        </div>
-
-        <div className="currency__options">
-          <div className="input" type="number" name="XAF">
-            {message3}
-          </div>
-          <span>XAF</span>
-        </div>
-
-        <div className="currency__options">
-          <div className="input" type="number" name="CNY">
-            {message4}
-          </div>
-          <span>CNY</span>
-        </div>
-
-        <div>
-          <h3>Total Currency</h3>
-          <div className="total__currency">{total}</div>
-        </div>
-      </div>
-
-      <div className="main__holder__right">
-        <img src={logo2} alt="logo" className="logo2" />
-        <h1>Currency Converter</h1>
-        <h3 className="paragraph">
-          <i>Below are some of the activities you can perform</i>
-        </h3>
-        <i>
-          <b>NB:</b> confirm at the end of any change done
-        </i>
-        <form className="main__holder__deposit" onSubmit={handleSubmit}>
-          <div className="main__heading">
-            <p>
-              <b>Default Currenncy:</b>
-            </p>
-            <select name="defaultCurrency" id="currencies">
-              <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="XAF">XAF</option>
-              <option value="CNY">CNY</option>
-            </select>
-          </div>
-
-          <h3 className="right__headings">Deposite</h3>
-          <div>
-            <span>Amount :</span>
-            <input type="number" name="Amount" />
-          </div>
-          <div>
-            <span>Currency for Deposite:</span>
-            <select name="currency" id="currencies2">
-              <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="XAF">XAF</option>
-              <option value="CNY">CNY</option>
-            </select>
-          </div>
-          <button type="submit" className="confirm">
-            confirm
-          </button>
-        </form>
-
-        <form className="main__holder__deposit" onSubmit={doExchange}>
-          <h3 className="right__headings">Exhange currencies</h3>
-          <div>
-            <span>Amount :</span>
-            <input type="number" name="deposite" />
-          </div>
-          <div className="exchanger">
-            <select id="currencies2" name="from">
-              <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="XAF">XAF</option>
-              <option value="CNY">CNY</option>
-            </select>
-            <i className="fa-sharp fa-solid fa-arrow-right" />
-            <select id="currencies2" name="too">
-              <option value="XAF">XAF</option>
-              <option value="CNY">CNY</option>
-              <option value="EUR">EUR</option>
-              <option value="USD">USD</option>
-            </select>
-          </div>
-          <button type="submit" className="confirm">
-            confirm
-          </button>
-        </form>
       </div>
     </div>
   );
