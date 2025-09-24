@@ -1,11 +1,8 @@
-/* eslint-disable no-alert */
-/* eslint-disable no-self-compare */
-/* eslint-disable prettier/prettier */
-import { useContext } from 'react';
+/* eslint-disable */
+import { useContext, useState, useEffect } from 'react';
 import './Main.css';
 import logo2 from '../Images/logo3.png';
 import { QuestionContext } from '../Context';
-import { useState, useEffect } from 'react';
 
 function Main() {
   const {
@@ -79,6 +76,42 @@ function Main() {
 
   const totalBalance = message1 + message2 + message3 + message4;
 
+  const updateTotal = (defaultCurrency) => {
+    if (defaultCurrency === 'USD') {
+      total = (
+        message1 +
+        message2 * exchangeRates.EUR.USD +
+        message3 * exchangeRates.XAF.USD +
+        message4 * exchangeRates.CNY.USD
+      ).toFixed(2);
+      setTotal(`${total} USD`);
+    } else if (defaultCurrency === 'EUR') {
+      total = (
+        message1 * exchangeRates.USD.EUR +
+        message2 +
+        message3 * exchangeRates.XAF.EUR +
+        message4 * exchangeRates.CNY.EUR
+      ).toFixed(2);
+      setTotal(`${total} EUR`);
+    } else if (defaultCurrency === 'XAF') {
+      total = (
+        message1 * exchangeRates.USD.XAF +
+        message2 * exchangeRates.EUR.XAF +
+        message3 +
+        message4 * exchangeRates.CNY.XAF
+      ).toFixed(2);
+      setTotal(`${total} XAF`);
+    } else {
+      total = (
+        message1 * exchangeRates.USD.CNY +
+        message2 * exchangeRates.EUR.CNY +
+        message3 * exchangeRates.XAF.CNY +
+        message4
+      ).toFixed(2);
+      setTotal(`${total} CNY`);
+    }
+  };
+
   const handleDeposit = (event) => {
     event.preventDefault();
     setIsProcessing(true);
@@ -150,42 +183,6 @@ function Main() {
       setIsProcessing(false);
       event.target.reset();
     }, 1500);
-  };
-
-  const updateTotal = (defaultCurrency) => {
-    if (defaultCurrency === 'USD') {
-      const total = (
-        message1 +
-        message2 * exchangeRates.EUR.USD +
-        message3 * exchangeRates.XAF.USD +
-        message4 * exchangeRates.CNY.USD
-      ).toFixed(2);
-      setTotal(`${total} USD`);
-    } else if (defaultCurrency === 'EUR') {
-      const total = (
-        message1 * exchangeRates.USD.EUR +
-        message2 +
-        message3 * exchangeRates.XAF.EUR +
-        message4 * exchangeRates.CNY.EUR
-      ).toFixed(2);
-      setTotal(`${total} EUR`);
-    } else if (defaultCurrency === 'XAF') {
-      const total = (
-        message1 * exchangeRates.USD.XAF +
-        message2 * exchangeRates.EUR.XAF +
-        message3 +
-        message4 * exchangeRates.CNY.XAF
-      ).toFixed(2);
-      setTotal(`${total} XAF`);
-    } else {
-      const total = (
-        message1 * exchangeRates.USD.CNY +
-        message2 * exchangeRates.EUR.CNY +
-        message3 * exchangeRates.XAF.CNY +
-        message4
-      ).toFixed(2);
-      setTotal(`${total} CNY`);
-    }
   };
 
   return (

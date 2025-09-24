@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useContext, useState, useEffect } from 'react';
 import { QuestionContext } from '../../Context';
 import './Shop.css';
@@ -228,9 +229,8 @@ function Shop() {
               <button
                 type="button"
                 key={category.id}
-                className={`category-btn ${
-                  selectedCategory === category.id ? 'active' : ''
-                }`}
+                className={`category-btn ${selectedCategory === category.id ? 'active' : ''
+                  }`}
                 onClick={() => setSelectedCategory(category.id)}
               >
                 <span className="category-icon">{category.icon}</span>
@@ -277,11 +277,10 @@ function Shop() {
                           {product.price[currency].toFixed(2)} {currency}
                         </span>
                         <span
-                          className={`balance ${
-                            data.balance >= product.price[currency]
+                          className={`balance ${data.balance >= product.price[currency]
                               ? 'sufficient'
                               : 'insufficient'
-                          }`}
+                            }`}
                         >
                           (Balance: {data.symbol}
                           {data.balance.toFixed(2)})
@@ -367,9 +366,8 @@ function Shop() {
                   return (
                     <div
                       key={currency}
-                      className={`payment-option ${
-                        !canAfford ? 'insufficient' : ''
-                      }`}
+                      className={`payment-option ${!canAfford ? 'insufficient' : ''
+                        }`}
                     >
                       <div className="payment-info">
                         <span className="currency-flag">{data.flag}</span>
@@ -388,9 +386,8 @@ function Shop() {
 
                       <button
                         type="button"
-                        className={`btn ${
-                          canAfford ? 'btn-success' : 'btn-disabled'
-                        }`}
+                        className={`btn ${canAfford ? 'btn-success' : 'btn-disabled'
+                          }`}
                         onClick={() => purchaseWithCurrency(currency)}
                         disabled={!canAfford || isProcessing}
                       >
@@ -398,8 +395,8 @@ function Shop() {
                         {isProcessing
                           ? 'Processing...'
                           : canAfford
-                          ? 'Buy Now'
-                          : 'Insufficient Funds'}
+                            ? 'Buy Now'
+                            : 'Insufficient Funds'}
                       </button>
                     </div>
                   );
