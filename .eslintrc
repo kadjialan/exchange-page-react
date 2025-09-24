@@ -1,11 +1,13 @@
 {
   "env": {
     "browser": true,
-    "es2021": true
+    "es2021": true,
+    "jest": true
   },
   "extends": [
     "plugin:react/recommended",
-    "airbnb"
+    "airbnb",
+    "plugin:prettier/recommended"
   ],
   "overrides": [],
   "parserOptions": {
@@ -25,16 +27,6 @@
           ".jsx"
         ]
       }
-    ],
-    "prettier/prettier": "off",
-    "react/button-has-type": "off",
-    "jsx-a11y/label-has-associated-control": "off",
-    "react/no-array-index-key": "off",
-    "no-shadow": "off",
-    "react/self-closing-comp": "off",
-    "jsx-a11y/click-events-have-key-events": "off",
-    "jsx-a11y/no-static-element-interactions": "off",
-    "prefer-destructuring": "off",
-    "no-use-before-define": "off"
+    ]
   }
 }

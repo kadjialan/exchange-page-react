@@ -7,7 +7,6 @@ import logo2 from '../Images/logo3.png';
 import { QuestionContext } from '../Context';
 import { useState, useEffect } from 'react';
 
-
 function Main() {
   const {
     message1, // USD
@@ -44,10 +43,38 @@ function Main() {
   };
 
   const currencyData = [
-    { code: 'USD', symbol: '$', flag: '🇺🇸', balance: message1, setter: setMessage1, color: '#22c55e' },
-    { code: 'EUR', symbol: '€', flag: '🇪🇺', balance: message2, setter: setMessage2, color: '#3b82f6' },
-    { code: 'XAF', symbol: 'F', flag: '🇨🇲', balance: message3, setter: setMessage3, color: '#f59e0b' },
-    { code: 'CNY', symbol: '¥', flag: '🇨🇳', balance: message4, setter: setMessage4, color: '#ef4444' },
+    {
+      code: 'USD',
+      symbol: '$',
+      flag: '🇺🇸',
+      balance: message1,
+      setter: setMessage1,
+      color: '#22c55e',
+    },
+    {
+      code: 'EUR',
+      symbol: '€',
+      flag: '🇪🇺',
+      balance: message2,
+      setter: setMessage2,
+      color: '#3b82f6',
+    },
+    {
+      code: 'XAF',
+      symbol: 'F',
+      flag: '🇨🇲',
+      balance: message3,
+      setter: setMessage3,
+      color: '#f59e0b',
+    },
+    {
+      code: 'CNY',
+      symbol: '¥',
+      flag: '🇨🇳',
+      balance: message4,
+      setter: setMessage4,
+      color: '#ef4444',
+    },
   ];
 
   const totalBalance = message1 + message2 + message3 + message4;
@@ -68,10 +95,13 @@ function Main() {
     }
 
     setTimeout(() => {
-      const currencyInfo = currencyData.find(c => c.code === currency);
+      const currencyInfo = currencyData.find((c) => c.code === currency);
       if (currencyInfo) {
         currencyInfo.setter(currencyInfo.balance + amount);
-        showNotification(`Successfully deposited ${amount} ${currency}`, 'success');
+        showNotification(
+          `Successfully deposited ${amount} ${currency}`,
+          'success'
+        );
         updateTotal(values.defaultCurrency);
       }
       setIsProcessing(false);
@@ -95,8 +125,8 @@ function Main() {
       return;
     }
 
-    const fromCurrencyData = currencyData.find(c => c.code === fromCurrency);
-    const toCurrencyData = currencyData.find(c => c.code === toCurrency);
+    const fromCurrencyData = currencyData.find((c) => c.code === fromCurrency);
+    const toCurrencyData = currencyData.find((c) => c.code === toCurrency);
 
     if (amount > fromCurrencyData.balance) {
       showNotification('Insufficient balance', 'error');
@@ -112,7 +142,9 @@ function Main() {
       toCurrencyData.setter(toCurrencyData.balance + convertedAmount);
 
       showNotification(
-        `Exchanged ${amount} ${fromCurrency} to ${convertedAmount.toFixed(2)} ${toCurrency}`,
+        `Exchanged ${amount} ${fromCurrency} to ${convertedAmount.toFixed(
+          2
+        )} ${toCurrency}`,
         'success'
       );
       setIsProcessing(false);
@@ -178,19 +210,30 @@ function Main() {
 
           <div className="currency-grid">
             {currencyData.map((currency) => (
-              <div key={currency.code} className="currency-card" style={{ '--color': currency.color }}>
+              <div
+                key={currency.code}
+                className="currency-card"
+                style={{ '--color': currency.color }}
+              >
                 <div className="currency-header">
                   <span className="currency-flag">{currency.flag}</span>
                   <span className="currency-code">{currency.code}</span>
                 </div>
                 <div className="currency-balance">
                   <span className="currency-symbol">{currency.symbol}</span>
-                  <span className="balance-amount">{currency.balance.toFixed(2)}</span>
+                  <span className="balance-amount">
+                    {currency.balance.toFixed(2)}
+                  </span>
                 </div>
                 <div className="currency-bar">
                   <div
                     className="currency-bar-fill"
-                    style={{ width: `${Math.min((currency.balance / 100) * 100, 100)}%` }}
+                    style={{
+                      width: `${Math.min(
+                        (currency.balance / 100) * 100,
+                        100
+                      )}%`,
+                    }}
                   ></div>
                 </div>
               </div>
@@ -253,7 +296,11 @@ function Main() {
 
                 <div className="form-group">
                   <label>Display Total In</label>
-                  <select name="defaultCurrency" className="form-select" required>
+                  <select
+                    name="defaultCurrency"
+                    className="form-select"
+                    required
+                  >
                     <option value="">Select display currency</option>
                     {currencyData.map((currency) => (
                       <option key={currency.code} value={currency.code}>
@@ -263,8 +310,16 @@ function Main() {
                   </select>
                 </div>
 
-                <button type="submit" className="btn btn-primary form-submit" disabled={isProcessing}>
-                  {isProcessing ? <div className="loading"></div> : <span>💳</span>}
+                <button
+                  type="submit"
+                  className="btn btn-primary form-submit"
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? (
+                    <div className="loading"></div>
+                  ) : (
+                    <span>💳</span>
+                  )}
                   {isProcessing ? 'Processing...' : 'Deposit Funds'}
                 </button>
               </form>
@@ -282,7 +337,8 @@ function Main() {
                       <option value="">Select currency</option>
                       {currencyData.map((currency) => (
                         <option key={currency.code} value={currency.code}>
-                          {currency.flag} {currency.code} ({currency.symbol}{currency.balance.toFixed(2)})
+                          {currency.flag} {currency.code} ({currency.symbol}
+                          {currency.balance.toFixed(2)})
                         </option>
                       ))}
                     </select>
@@ -318,8 +374,16 @@ function Main() {
                   />
                 </div>
 
-                <button type="submit" className="btn btn-secondary form-submit" disabled={isProcessing}>
-                  {isProcessing ? <div className="loading"></div> : <span>🔄</span>}
+                <button
+                  type="submit"
+                  className="btn btn-secondary form-submit"
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? (
+                    <div className="loading"></div>
+                  ) : (
+                    <span>🔄</span>
+                  )}
                   {isProcessing ? 'Exchanging...' : 'Exchange Currency'}
                 </button>
               </form>

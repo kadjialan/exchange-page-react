@@ -40,7 +40,9 @@ function Navigation() {
           </Link>
           <Link
             to="/exchange"
-            className={`nav-link ${location.pathname === '/exchange' ? 'active' : ''}`}
+            className={`nav-link ${
+              location.pathname === '/exchange' ? 'active' : ''
+            }`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className="nav-icon">💱</span>
@@ -48,7 +50,9 @@ function Navigation() {
           </Link>
           <Link
             to="/shop"
-            className={`nav-link ${location.pathname === '/shop' ? 'active' : ''}`}
+            className={`nav-link ${
+              location.pathname === '/shop' ? 'active' : ''
+            }`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className="nav-icon">🛍️</span>
@@ -59,10 +63,7 @@ function Navigation() {
         <div className="nav-wallet">
           <div className="wallet-info">
             <span className="wallet-icon">👛</span>
-            <span className="wallet-total">
-              $
-              {totalBalance.toFixed(2)}
-            </span>
+            <span className="wallet-total">${totalBalance.toFixed(2)}</span>
           </div>
         </div>
 

@@ -18,23 +18,24 @@ function Home() {
     {
       icon: '💱',
       title: 'Currency Exchange',
-      description: 'Exchange between USD, EUR, XAF, and CNY with real-time rates'
+      description:
+        'Exchange between USD, EUR, XAF, and CNY with real-time rates',
     },
     {
       icon: '🛍️',
       title: 'Digital Shopping',
-      description: 'Purchase items using your digital wallet balance'
+      description: 'Purchase items using your digital wallet balance',
     },
     {
       icon: '👛',
       title: 'Digital Wallet',
-      description: 'Manage multiple currencies in one secure wallet'
+      description: 'Manage multiple currencies in one secure wallet',
     },
     {
       icon: '📊',
       title: 'Live Tracking',
-      description: 'Monitor your balances and transactions in real-time'
-    }
+      description: 'Monitor your balances and transactions in real-time',
+    },
   ];
 
   useEffect(() => {
@@ -68,7 +69,7 @@ function Home() {
 
             <div className="hero-logo">
               <img src={logo1} alt="PlusMinus Logo" className="logo-image" />
-              <div className="logo-glow"></div>
+              <div className="logo-glow" />
             </div>
 
             <div className="wallet-preview">
@@ -116,8 +117,9 @@ function Home() {
           <div className="features-grid">
             {features.map((feature, index) => (
               <div
-                key={index}
-                className={`feature-card ${index === currentFeature ? 'active' : ''}`}
+                key={feature.title}
+                className={`feature-card ${index === currentFeature ? 'active' : ''
+                  }`}
               >
                 <div className="feature-icon">{feature.icon}</div>
                 <h3 className="feature-title">{feature.title}</h3>

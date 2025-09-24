@@ -35,7 +35,8 @@ function Shop() {
     {
       id: 1,
       name: 'Premium Headphones',
-      description: 'Wireless noise-canceling headphones with premium sound quality',
+      description:
+        'Wireless noise-canceling headphones with premium sound quality',
       price: { USD: 299.99, EUR: 279.99, XAF: 180000, CNY: 2039.99 },
       category: 'electronics',
       image: '🎧',
@@ -121,9 +122,10 @@ function Shop() {
     { id: 'home', name: 'Home & Kitchen', icon: '🏠' },
   ];
 
-  const filteredProducts = selectedCategory === 'all'
-    ? products
-    : products.filter(product => product.category === selectedCategory);
+  const filteredProducts =
+    selectedCategory === 'all'
+      ? products
+      : products.filter((product) => product.category === selectedCategory);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -131,13 +133,15 @@ function Shop() {
   };
 
   const addToCart = (product) => {
-    const existingItem = cart.find(item => item.id === product.id);
+    const existingItem = cart.find((item) => item.id === product.id);
     if (existingItem) {
-      setCart(cart.map(item =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      ));
+      setCart(
+        cart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
     } else {
       setCart([...cart, { ...product, quantity: 1 }]);
     }
@@ -145,7 +149,7 @@ function Shop() {
   };
 
   const removeFromCart = (productId) => {
-    setCart(cart.filter(item => item.id !== productId));
+    setCart(cart.filter((item) => item.id !== productId));
     showNotification('Removed from cart', 'success');
   };
 
@@ -154,15 +158,18 @@ function Shop() {
       removeFromCart(productId);
       return;
     }
-    setCart(cart.map(item =>
-      item.id === productId
-        ? { ...item, quantity: newQuantity }
-        : item
-    ));
+    setCart(
+      cart.map((item) =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      )
+    );
   };
 
   const getTotalPrice = (currency) => {
-    return cart.reduce((total, item) => total + (item.price[currency] * item.quantity), 0);
+    return cart.reduce(
+      (total, item) => total + item.price[currency] * item.quantity,
+      0
+    );
   };
 
   const purchaseWithCurrency = (currency) => {
@@ -179,7 +186,9 @@ function Shop() {
     setTimeout(() => {
       currencyInfo.setter(currencyInfo.balance - totalPrice);
       showNotification(
-        `Purchase successful! Paid ${currencyInfo.symbol}${totalPrice.toFixed(2)} ${currency}`,
+        `Purchase successful! Paid ${currencyInfo.symbol}${totalPrice.toFixed(
+          2
+        )} ${currency}`,
         'success'
       );
       setCart([]);
@@ -195,7 +204,9 @@ function Shop() {
       {notification && (
         <div className={`notification ${notification.type}`}>
           <span>{notification.message}</span>
-          <button type='button' onClick={() => setNotification(null)}>×</button>
+          <button type="button" onClick={() => setNotification(null)}>
+            ×
+          </button>
         </div>
       )}
 
@@ -215,9 +226,11 @@ function Shop() {
           <div className="categories-grid">
             {categories.map((category) => (
               <button
-                type='button'
+                type="button"
                 key={category.id}
-                className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
+                className={`category-btn ${
+                  selectedCategory === category.id ? 'active' : ''
+                }`}
                 onClick={() => setSelectedCategory(category.id)}
               >
                 <span className="category-icon">{category.icon}</span>
@@ -233,10 +246,11 @@ function Shop() {
             <h2>
               {selectedCategory === 'all'
                 ? 'All Products'
-                : categories.find(c => c.id === selectedCategory)?.name
-              }
+                : categories.find((c) => c.id === selectedCategory)?.name}
             </h2>
-            <span className="product-count">{filteredProducts.length} products</span>
+            <span className="product-count">
+              {filteredProducts.length} products
+            </span>
           </div>
 
           <div className="products-grid">
@@ -259,17 +273,25 @@ function Shop() {
                       <div key={currency} className="price-option">
                         <span className="currency-flag">{data.flag}</span>
                         <span className="price">
-                          {data.symbol}{product.price[currency].toFixed(2)} {currency}
+                          {data.symbol}
+                          {product.price[currency].toFixed(2)} {currency}
                         </span>
-                        <span className={`balance ${data.balance >= product.price[currency] ? 'sufficient' : 'insufficient'}`}>
-                          (Balance: {data.symbol}{data.balance.toFixed(2)})
+                        <span
+                          className={`balance ${
+                            data.balance >= product.price[currency]
+                              ? 'sufficient'
+                              : 'insufficient'
+                          }`}
+                        >
+                          (Balance: {data.symbol}
+                          {data.balance.toFixed(2)})
                         </span>
                       </div>
                     ))}
                   </div>
 
                   <button
-                    type='button'
+                    type="button"
                     className="btn btn-primary add-to-cart-btn"
                     onClick={() => addToCart(product)}
                   >
@@ -288,7 +310,7 @@ function Shop() {
             <div className="cart-header">
               <h2>🛒 Shopping Cart ({cartTotal} items)</h2>
               <button
-                type='button'
+                type="button"
                 className="btn btn-secondary"
                 onClick={() => setCart([])}
               >
@@ -304,14 +326,28 @@ function Shop() {
                     <div className="cart-item-details">
                       <h4>{item.name}</h4>
                       <div className="quantity-controls">
-                        <button type='button' onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
+                        >
+                          -
+                        </button>
                         <span>{item.quantity}</span>
-                        <button type='button' onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                   </div>
                   <button
-                    type='button'
+                    type="button"
                     className="remove-btn"
                     onClick={() => removeFromCart(item.id)}
                   >
@@ -329,29 +365,41 @@ function Shop() {
                   const canAfford = data.balance >= total;
 
                   return (
-                    <div key={currency} className={`payment-option ${!canAfford ? 'insufficient' : ''}`}>
+                    <div
+                      key={currency}
+                      className={`payment-option ${
+                        !canAfford ? 'insufficient' : ''
+                      }`}
+                    >
                       <div className="payment-info">
                         <span className="currency-flag">{data.flag}</span>
                         <div className="payment-details">
                           <span className="currency-name">{currency}</span>
                           <span className="total-price">
-                            Total: {data.symbol}{total.toFixed(2)}
+                            Total: {data.symbol}
+                            {total.toFixed(2)}
                           </span>
                           <span className="balance-info">
-                            Balance: {data.symbol}{data.balance.toFixed(2)}
+                            Balance: {data.symbol}
+                            {data.balance.toFixed(2)}
                           </span>
                         </div>
                       </div>
 
-
                       <button
-                        type='button'
-                        className={`btn ${canAfford ? 'btn-success' : 'btn-disabled'}`}
+                        type="button"
+                        className={`btn ${
+                          canAfford ? 'btn-success' : 'btn-disabled'
+                        }`}
                         onClick={() => purchaseWithCurrency(currency)}
                         disabled={!canAfford || isProcessing}
                       >
                         {isProcessing ? <div className="loading" /> : '💳'}
-                        {isProcessing ? 'Processing...' : canAfford ? 'Buy Now' : 'Insufficient Funds'}
+                        {isProcessing
+                          ? 'Processing...'
+                          : canAfford
+                          ? 'Buy Now'
+                          : 'Insufficient Funds'}
                       </button>
                     </div>
                   );
